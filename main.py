@@ -39,20 +39,25 @@ def musitic():
     plt.tight_layout()
     plt.show()
 
-    #select signal from one channel:
-    signal = sound[:,0]
+    ###############################################################
+    # select separated signals from each channel:
+    signal0 = sound[:,0]
+    signal1 = sound[:,1]
 
     # duration = sampFreq * time_s
     duration = int(sampFreq * 0.358)
 
-    plt.plot(time[0:duration], signal[0:duration])
+    plt.plot(time[0:duration], signal0[0:duration], 'r')
+    plt.plot(time[0:duration], signal1[0:duration], 'b')
+
     plt.xlabel("time, s")
     plt.ylabel("Signal, relative units")
     plt.show()
 
+    ###############################################################
     # frequency content with FFT:
-    fft_spectrum = np.fft.rfft(signal)
-    freq = np.fft.rfftfreq(signal.size, d=1./sampFreq)
+    fft_spectrum = np.fft.rfft(signal0)
+    freq = np.fft.rfftfreq(signal0.size, d=1./sampFreq)
 
     '''
     To simplify the concept without going deeply into the theorical part, let's say that when we performe the fft to get:
