@@ -5,8 +5,8 @@ from scipy.io import wavfile
 
 
 def musitic():
-    plt.rcParams['figure.dpi'] = 100
-    plt.rcParams['figure.figsize'] = (12, 7)
+    plt.rcParams['figure.dpi'] = 72
+    plt.rcParams['figure.figsize'] = (14, 8)
 
     sampFreq, sound = wavfile.read('audio/32943-short.wav')
 
