@@ -1,4 +1,16 @@
 ## musitix
 <div align="left">
-   <img src="https://github.com/diixo/diixo/blob/main/repository-diixo-960x480.png" width="40% height="40%" alt="black Bloomberg Engineering logo on white background">
+
+   <div align="left">
+      <img src="/imgs/waveform.png" width="40% height="40%" alt="waveform">
+   </div>
+
+   <div align="left">
+      <img src="/imgs/bump.png" width="40% height="40%" alt="bump">
+   </div>
+
+   <div align="left">
+      <img src="/imgs/fft-spectr.png" width="40% height="40%" alt="fft-spectr">
+   </div>
+
 </div>
