@@ -38,7 +38,7 @@ def musitic(fileName: str):
     plt.xlabel("time, s [right channel]")
     plt.ylabel("signal, relative units")
     plt.tight_layout()
-    plt.suptitle("Waveform")
+    plt.suptitle("Waveform:" + fileName)
     plt.show()
 
     ###############################################################
@@ -109,8 +109,8 @@ def musitic(fileName: str):
 
 
 def main():
-    #musitic('data/original_a3s.wav')
-    musitic('audio/32943-short.wav')
+    musitic('data/mix2.wav')
+    #musitic('audio/32943-short.wav')
     pass
     
 if __name__ == "__main__":
