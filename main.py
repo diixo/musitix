@@ -4,13 +4,14 @@ import numpy as np
 from scipy.io import wavfile
 
 
-def musitic():
+def musitic(fileName: str):
     plt.rcParams['figure.dpi'] = 72
     plt.rcParams['figure.figsize'] = (14, 8)
 
-    sampFreq, sound = wavfile.read('audio/32943-short.wav')
+    sampFreq, sound = wavfile.read(fileName)
 
-    # Considering the sampling rate (sampFreq = 44110) this corresponds to a duration of around 1.03 seconds
+    # Convert our sound (numpy) array to floating point values ranging from -1 to 1 as follows:
+    sound = sound / (2.0**15.0)
 
     # graph by signal bitrate:
     #plt.subplot(2,1,1)
@@ -37,12 +38,13 @@ def musitic():
     plt.xlabel("time, s [right channel]")
     plt.ylabel("signal, relative units")
     plt.tight_layout()
+    plt.suptitle("Waveform")
     plt.show()
 
     ###############################################################
     # select separated signals from each channel:
-    signal0 = sound[:,0]
-    signal1 = sound[:,1]
+    signal0 = sound[:,0]    # left channel
+    signal1 = sound[:,1]    # right channel
 
     # duration = sampFreq * time_s
     duration = int(sampFreq * 0.358)
@@ -52,6 +54,7 @@ def musitic():
 
     plt.xlabel("time, s")
     plt.ylabel("Signal, relative units")
+    plt.suptitle("Bump")
     plt.show()
 
     ###############################################################
@@ -75,22 +78,39 @@ def musitic():
     # A human can hear a sound that is in the 20-20,000 Hz range. However, our sound doesn't contain frequencies greater than 3 kHz. 
     # It's interesting. Let's zoom in on the highest peaks:
 
-    #Apply range[0:5000]
-    plt.plot(freq[:5000], fft_spectrum_abs[:5000])
+    # Apply range[0:3000]
+    plt.plot(freq[:3000], fft_spectrum_abs[:3000])
     plt.xlabel("frequency, Hz")
     plt.ylabel("Amplitude, units")
+    plt.suptitle("FFT-spectr")
     plt.show()
 
     #################
     return
+
     for i, f in enumerate(fft_spectrum_abs):
         if f > 350: #looking at amplitudes of the spikes higher than 350 
             print('frequency = {} Hz with amplitude {} '.format(np.round(freq[i], 1), np.round(f)))
+
+    # filter electric noise:
+    for i,f in enumerate(freq):
+        if f < 62 and f > 58:# (1)
+            fft_spectrum[i] = 0.0
+        if f < 21 or f > 20000:# (2)
+            fft_spectrum[i] = 0.0
+
+    plt.plot(freq[:1000], fft_spectrum_abs[:1000])
+    plt.xlabel("frequency, Hz")
+    plt.ylabel("Amplitude, units")
+    plt.suptitle("FFT-spectr LOW-filtered")
+    plt.show()
+
     pass
 
 
 def main():
-    musitic()
+    #musitic('data/original_a3s.wav')
+    musitic('audio/32943-short.wav')
     pass
     
 if __name__ == "__main__":
