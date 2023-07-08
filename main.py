@@ -48,7 +48,9 @@ def musitic(fileName: str):
     signal1 = sound[:,1]    # right channel
 
     # duration = sampFreq * time_s
-    duration = int(sampFreq * 0.358)
+    time_s = 0.358
+    #time_s = length_in_s
+    duration = int(sampFreq * time_s)
 
     smooth = np.array(signal0[0:duration])
     mx, mn = synt.findLocalMaxMin(smooth)
@@ -90,11 +92,15 @@ def musitic(fileName: str):
     # It's interesting. Let's zoom in on the highest peaks:
 
     # Apply range[0:3000]
-    plt.plot(freq[:3000], fft_spectrum_abs[:3000])
+    plt.plot(freq[:2000], fft_spectrum_abs[:2000])
     plt.xlabel("frequency, Hz")
     plt.ylabel("Amplitude, units")
     plt.suptitle("FFT-spectr")
     plt.show()
+
+    # Recreate the original signal via an inverse FFT:
+    original_signal = np.fft.irfft(fft_spectrum)
+    wavfile.write("test.wav", sampFreq, original_signal)
 
     #################
     return
