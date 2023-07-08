@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.io import wavfile
+import synt
 
 
 def musitic(fileName: str):
@@ -49,8 +50,18 @@ def musitic(fileName: str):
     # duration = sampFreq * time_s
     duration = int(sampFreq * 0.358)
 
-    plt.plot(time[0:duration], signal0[0:duration], 'r')
-    plt.plot(time[0:duration], signal1[0:duration], 'b')
+    smooth = np.array(signal0[0:duration])
+    mx, mn = synt.findLocalMaxMin(smooth)
+    for id in range(len(mx)-1):
+        id0 = mx[id]
+        id1 = mx[id+1]
+        if id1 - id0 <= 20:
+            aprox = np.linspace(signal0[id0], signal0[id1], id1 - id0)
+            smooth[id0:id1] = max(signal0[id0], signal0[id1])
+
+
+    plt.plot(time[0:duration], signal0[0:duration], 'b')
+    #plt.plot(time[0:duration], smooth[0:duration], 'r')
 
     plt.xlabel("time, s")
     plt.ylabel("Signal, relative units")
@@ -59,8 +70,8 @@ def musitic(fileName: str):
 
     ###############################################################
     # frequency content with FFT:
-    fft_spectrum = np.fft.rfft(signal0)
-    freq = np.fft.rfftfreq(signal0.size, d=1./sampFreq)
+    fft_spectrum = np.fft.rfft(signal0[0:duration])
+    freq = np.fft.rfftfreq(duration, d=1./sampFreq)
 
     '''
     To simplify the concept without going deeply into the theorical part, let's say that when we performe the fft to get:
@@ -109,8 +120,8 @@ def musitic(fileName: str):
 
 
 def main():
-    musitic('data/mix2.wav')
-    #musitic('audio/32943-short.wav')
+    #musitic('data/mix2.wav')
+    musitic('audio/32943-short.wav')
     pass
     
 if __name__ == "__main__":
