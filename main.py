@@ -127,7 +127,7 @@ def musitic(fileName: str):
 
 def main():
     #musitic('data/mix2.wav')
-    musitic('audio/32943-short.wav')
+    musitic('audio/short-full.wav')
     pass
     
 if __name__ == "__main__":
