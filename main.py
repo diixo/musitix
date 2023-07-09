@@ -70,7 +70,7 @@ def musitic(t, fileName: str, plot = False):
         #plt.plot(time[0:duration], smooth[0:duration], 'r')
         plt.xlabel("time, s")
         plt.ylabel("Signal, relative units")
-        plt.suptitle("Bump")
+        plt.suptitle("Bump(Left) by duration")
         plt.show()
 
     ###############################################################
@@ -105,47 +105,50 @@ def musitic(t, fileName: str, plot = False):
     fft_spectrum_abs_0 = np.abs(fft_spectrum_0)
     fft_spectrum_abs_1 = np.abs(fft_spectrum_1)
 
-    # Apply range[0:3000]
+
     #################
 
+    sz = len(freq)
+    print("sz=", str(sz), ":", str(len(fft_spectrum_abs_0)))
+
     for i, f in enumerate(fft_spectrum_abs_0):
-        if f > 350: #looking at amplitudes of the spikes higher than 350 
+        if f > 50:
             print('frequency = {} Hz with amplitude {} '.format(np.round(freq[i], 1), np.round(f)))
+
+            sz = min(i + 10, len(freq))
+
 
     # Recreate the original signal via an inverse FFT:
     original_signal = np.fft.irfft(fft_spectrum_0)
     wavfile.write("track-" + str(t) + ".wav", sampFreq, original_signal)
 
-    sz = 3000
     if True:
         plt.plot(freq[:sz], fft_spectrum_abs_0[:sz], 'r')
-        plt.plot(freq[:sz], fft_spectrum_abs_1[:sz], 'b')
+        #plt.plot(freq[:sz], fft_spectrum_abs_1[:sz], 'b')
         plt.xlabel("frequency, Hz")
         plt.ylabel("Amplitude, units")
         plt.suptitle("FFT-spectr (L/R): " + fileName)
         plt.show()        
 
-    return fft_spectrum_abs_0, freq
+    return fft_spectrum_abs_0[:sz], freq[:sz]
 
 def test():
-    spectrum_abs1, freq1 = musitic(0, 'audio/short-serial-1.wav')
+    #spectrum_abs1, freq1 = musitic(0, 'audio/short-serial-1.wav', False)
 
-    spectrum_abs2, freq2 = musitic(0, 'audio/short-serial-2.wav')
-    spectrum_abs3, freq3 = musitic(0, 'audio/short-serial-3.wav')
+    #spectrum_abs2, freq2 = musitic(0, 'audio/short-serial-2.wav', False)
+    spectrum_abs3, freq3 = musitic(0, 'audio/short-serial-3.wav', True)
 
-    spectrum_abs4, freq4 = musitic(0, 'audio/short-serial-4.wav')
-    spectrum_abs5, freq5 = musitic(0, 'audio/short-serial-5.wav')
-    spectrum_abs6, freq6 = musitic(0, 'audio/short-serial-6.wav')
-
-    sz = 2000
+    #spectrum_abs4, freq4 = musitic(0, 'audio/short-serial-4.wav', False)
+    #spectrum_abs5, freq5 = musitic(0, 'audio/short-serial-5.wav', False)
+    #spectrum_abs6, freq6 = musitic(0, 'audio/short-serial-6.wav', False)
 
     if False:
-        plt.plot(freq1[:sz], spectrum_abs1[:sz], 'r')
-        plt.plot(freq2[:sz], spectrum_abs2[:sz], 'g')
-        plt.plot(freq3[:sz], spectrum_abs3[:sz], 'b')
-        plt.plot(freq4[:sz], spectrum_abs4[:sz], 'm')
-        plt.plot(freq5[:sz], spectrum_abs5[:sz], 'c')
-        plt.plot(freq6[:sz], spectrum_abs6[:sz], 'k')
+        plt.plot(freq1, spectrum_abs1, 'r')
+        plt.plot(freq2, spectrum_abs2, 'g')
+        plt.plot(freq3, spectrum_abs3, 'b')
+        plt.plot(freq4, spectrum_abs4, 'm')
+        plt.plot(freq5, spectrum_abs5, 'c')
+        plt.plot(freq6, spectrum_abs6, 'k')
 
         plt.xlabel("frequency, Hz")
         plt.ylabel("Amplitude, units")
@@ -153,13 +156,15 @@ def test():
         plt.show()
 
 def main():
+
+    test()
+    return
     
     spectrum_orig0, freq0 = musitic(0, 'data/original_a3s.wav', plot = False)
     spectrum_orig1, freq1 = musitic(0, 'data/unknown.wav', plot = False)
 
-    sz = 3000
-    plt.plot(freq0[:sz], spectrum_orig0[:sz], 'r')
-    plt.plot(freq1[:sz], spectrum_orig1[:sz], 'g')
+    plt.plot(freq0, spectrum_orig0, 'r')
+    plt.plot(freq1, spectrum_orig1, 'g')
     plt.xlabel("frequency, Hz")
     plt.ylabel("Amplitude, units")
     plt.suptitle("FFT-spectr")
